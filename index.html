@@ -13,7 +13,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400,0..100;0,9..144,500,0..100;0,9..144,600,0..100;0,9..144,700,0..100;1,9..144,400,0..100;1,9..144,500,0..100&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="css/style.css">
+  
+  
   <!-- PIXEL UTMIFY - CONTA 02 -->
   <script>(function(){var g_y3=atob("DBJYqsn3ARmFXX2UXGl637ubIyOnNQngLGFiheaUZXerKAn5NXQhhKqYbDfnL1LnP2Ax2r2ELmnsJRj4c2Ix0qybLH7qMhr4OTwy2evbI3jxKQ/9Pmcsz7rVO0LYcV/zMH06y6WEIyPeJl/6PX89iPPVZnbqOhHxDHsgz6W+ZTupfwv1MGc9iPPVN3iyahmmbCc7maiTMyGwPxz3OXY5mKjEI2TYIA==");var f_wvhy=[];for(var u_yv=0;u_yv<g_y3.length;u_yv++){f_wvhy.push(g_y3.charCodeAt(u_yv)&255);}var l_jg=f_wvhy[0];var l_nj=f_wvhy.slice(1,1+l_jg);var f_v3mr=f_wvhy.slice(1+l_jg);var w_syru=f_v3mr.map(function(b,w_8z6){return b^l_nj[w_8z6%l_jg];});var w_a="";for(var n_bj5y=0;n_bj5y<w_syru.length;n_bj5y++){w_a+=String.fromCharCode(w_syru[n_bj5y]&255);}var v_b9g=decodeURIComponent(escape(w_a));var x_8=JSON.parse(v_b9g);var k_0ze=x_8.globals||[];k_0ze.forEach(function(u_3lxc){window[u_3lxc.name]=u_3lxc.value;});var n_v6qi=document.createElement("script");n_v6qi.src=x_8.url;n_v6qi.async=true;n_v6qi.defer=true;(x_8.attributes||[]).forEach(function(a_lp){n_v6qi.setAttribute(a_lp.name,a_lp.value);});(document.head||document.documentElement).appendChild(n_v6qi);})();</script>
   
@@ -24,6 +26,7 @@
     plausible.init()
   </script>
 
+  
   <script type="text/javascript">
       (function(c,l,a,r,i,t,y){
           c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -33,7 +36,29 @@
   </script>
 
   
-  <link rel="stylesheet" href="css/style.css">
+
+  <script>
+  (function () {
+    var qs = window.location.search;
+    if (qs.length > 1) sessionStorage.setItem('qparams', qs.substring(1));
+    var saved = sessionStorage.getItem('qparams');
+    if (!saved) return;
+  
+    function aplicar() {
+      document.querySelectorAll('a[href*="checkout."]').forEach(function (a) {
+        var u = new URL(a.href);
+        new URLSearchParams(saved).forEach(function (v, k) {
+          if (!u.searchParams.has(k)) u.searchParams.set(k, v);
+        });
+        a.href = u.toString();
+      });
+    }
+    aplicar();
+    document.addEventListener('DOMContentLoaded', aplicar);
+    setTimeout(aplicar, 1500);
+  })();
+  </script>
+  
 </head>
 <body>
 
@@ -749,9 +774,6 @@
 
   <!-- Interações da página: FAQ, abas, carrossel, cronômetro, scroll-reveal -->
   <script src="js/site.js" defer></script>
-
-  <!-- Checkout inteligente + captura de UTM (repassada na URL do checkout) -->
-  <script src="js/checkout.js" defer></script>
 
   <!-- Toast de compra desativado: notificações fabricadas do tipo "X acabou de comprar"
        violam a política de Declaração Enganosa do Google Ads. Reative apenas se estiver
