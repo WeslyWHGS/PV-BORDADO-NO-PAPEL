@@ -59,6 +59,70 @@ document.addEventListener('DOMContentLoaded', function () {
     updateArrows();
   })();
 
+  // Depoimentos — carrossel automático (só ativo no modo mobile, quando o
+  // mural vira scroll horizontal via CSS). Pausa ao tocar/arrastar e
+  // retoma sozinho depois de um tempo parado; some se a aba não está
+  // visível ou a seção está fora da tela; respeita prefers-reduced-motion.
+  (function () {
+    var track = document.querySelector('.testimonials-grid');
+    if (!track) return;
+
+    var AUTO_MS = 3200;
+    var RESUME_DELAY_MS = 5000;
+    var timer = null;
+    var resumeTimer = null;
+    var userPaused = false;
+    var inView = false;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function isCarouselMode() {
+      return track.scrollWidth > track.clientWidth + 4;
+    }
+    function stepWidth() {
+      var card = track.querySelector('.testimonial-shot');
+      if (!card) return track.clientWidth;
+      var gap = parseFloat(getComputedStyle(track).gap) || 14;
+      return card.getBoundingClientRect().width + gap;
+    }
+    function tick() {
+      if (reduceMotion || userPaused || !inView || !isCarouselMode()) return;
+      var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: stepWidth(), behavior: 'smooth' });
+      }
+    }
+    function start() {
+      stop();
+      if (reduceMotion) return;
+      timer = setInterval(tick, AUTO_MS);
+    }
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+    function pauseForInteraction() {
+      userPaused = true;
+      if (resumeTimer) clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(function () { userPaused = false; }, RESUME_DELAY_MS);
+    }
+
+    ['touchstart', 'pointerdown', 'wheel'].forEach(function (evt) {
+      track.addEventListener(evt, pauseForInteraction, { passive: true });
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { inView = e.isIntersecting; });
+    }, { threshold: 0.4 });
+    io.observe(track);
+
+    start();
+  })();
+
   // Countdown — Hours : Minutes : Seconds (evergreen rolling cycle)
   (function () {
     var el = document.getElementById('megaCountdown');
